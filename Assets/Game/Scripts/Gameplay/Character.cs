@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Character : MonoBehaviour
 {
@@ -13,9 +14,13 @@ public class Character : MonoBehaviour
     [SerializeField] protected GameObject weapon;
     [SerializeField] protected SkinnedMeshRenderer characterMesh;
     [SerializeField] protected SkinnedMeshRenderer pantsMesh;
+    [SerializeField] protected LayerMask myCharacter;
+    protected bool isMoving;
+    [SerializeField] protected Transform weaponPosition;
     public List<Material> pantMaterials;
-    protected float speed = 5;
+    protected float speed =5;
     protected float radius = 14f;
+    public float attackTime;
     // Start is called before the first frame update
     void Start()
     {
@@ -24,13 +29,22 @@ public class Character : MonoBehaviour
     protected void OnInit()
     {
         ChangeAnim(AnimationType.IDLE);
-        int temp=Random.Range(0,8);
+        int temp=Random.Range(0,pantMaterials.Count);
         ChangeSkin(temp);
        
     }
     // Update is called once per frame
-    void Update()
+    public virtual void Update()
     {
+        attackTime-=Time.deltaTime;
+        if (attackTime < 0)
+        {
+            if (!isMoving && TheNearestCharacter(this.gameObject) != null)
+            {
+                Attack();
+
+            }
+        }
         
     }
     public void ChangeAnim(AnimationType _type)
@@ -66,7 +80,13 @@ public class Character : MonoBehaviour
     }
     protected void Attack()
     {
-
+        attackTime = 3f;
+        GameObject temp = TheNearestCharacter(this.gameObject);
+        transform.LookAt(temp.transform.position);
+        ChangeAnim(AnimationType.ATTACK);
+        
+        weapon.GetComponent<Weapon>().Fire(TheNearestCharacter(this.gameObject).transform.position);
+        Debug.Log("attacking");
     }
     protected void Ulti()
     {
@@ -76,13 +96,46 @@ public class Character : MonoBehaviour
     {
 
     }
-    protected void ChangeSkin(int colorID)
+    public void ChangeSkin(int colorID)
     {
         if (colorID < pantMaterials.Count)
         {
             characterMesh.material = pantMaterials[colorID];
             pantsMesh.material = pantMaterials[colorID];
         }
+    }
+    protected GameObject TheNearestCharacter(GameObject theGameObject)
+    {
+        Collider[] hitColliders = Physics.OverlapSphere(theGameObject.transform.position, radius / 2, myCharacter);
+        if (hitColliders.Length > 1 && !isMoving)
+        {
+            float distance = 100000f;
+            GameObject temp = null;
+            foreach(Collider collider in hitColliders)
+            {
+                float tempDistance = Vector3.Distance(collider.transform.position, theGameObject.transform.position);
+                if (collider.gameObject != theGameObject&&tempDistance<distance)
+                {
+                    temp = collider.gameObject;
+                    distance = tempDistance;
+                }
+            }
+            return temp;
+            //transform.LookAt(temp.transform.position);
+            //weapon.transform.position = Vector3.MoveTowards(weapon.transform.position, temp.transform.position, 3f * Time.deltaTime);
+        }
+        else
+        {
+            return null;
+        }
+    }
+    public void ThrowWeapon()
+    {
+
+    }
+    public void EndAttack()
+    {
+
     }
    
 

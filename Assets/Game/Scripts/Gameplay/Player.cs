@@ -10,7 +10,7 @@ public class Player : Character
     Vector3 dir;
     [SerializeField] GameObject cylinder;
     [SerializeField]Rigidbody rb;
-    protected bool isMoving;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -20,8 +20,9 @@ public class Player : Character
     }
 
     // Update is called once per frame
-    void Update()
+    public override void Update()
     {
+        base.Update();
         if (variableJoystick.Horizontal != 0 || variableJoystick.Vertical != 0)
         {
             
@@ -41,15 +42,18 @@ public class Player : Character
             ChangeAnim(AnimationType.IDLE);
         }
         cylinder.transform.localScale=new Vector3(radius,cylinder.transform.localScale.y,radius);
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, radius/2);
-        if(hitColliders.Length > 0&&!isMoving)
+        if (!isMoving)
         {
-            Debug.Log("the number of list is "+hitColliders.Length);
-            GameObject temp = hitColliders[0].gameObject;
-            transform.LookAt(temp.transform.position);
-            weapon.transform.position=Vector3.MoveTowards(weapon.transform.position,temp.transform.position,3f*Time.deltaTime);
+            if(TheNearestCharacter(this.gameObject) == null)
+            {
+                Debug.Log("not found");
+            }
+            else
+            {
+                Debug.Log(TheNearestCharacter(this.gameObject).name);
+            }
         }
-        
+
     }
     public void Moving()
     {
