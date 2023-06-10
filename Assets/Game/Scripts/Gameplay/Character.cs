@@ -9,25 +9,29 @@ public class Character : MonoBehaviour
     {
         IDLE=0, RUN=1, WIN=2,DEAD=3,ATTACK=4,DANCE=5,ULTI=6
     }
-    protected AnimationType currentAnimType = AnimationType.IDLE;
+    [SerializeField] protected AnimationType currentAnimType = AnimationType.IDLE;
     [SerializeField] protected Animator animator;
     [SerializeField] protected GameObject weapon;
     [SerializeField] protected SkinnedMeshRenderer characterMesh;
     [SerializeField] protected SkinnedMeshRenderer pantsMesh;
     [SerializeField] protected LayerMask myCharacter;
-    protected bool isMoving;
-    [SerializeField] protected Transform weaponPosition;
+    public bool isMoving=false;
+    [SerializeField] protected Transform weaponTransform;
+    [SerializeField] protected Transform weaponBase;
     public List<Material> pantMaterials;
-    protected float speed =5;
+    protected float speed =10f;
     protected float radius = 14f;
+    //public bool isDead=false;
     public float attackTime;
+    public bool isAttack=false;
     // Start is called before the first frame update
     void Start()
     {
-        
+        //OnInit();
     }
-    protected void OnInit()
+    public virtual void OnInit()
     {
+        //isDead=false;
         ChangeAnim(AnimationType.IDLE);
         int temp=Random.Range(0,pantMaterials.Count);
         ChangeSkin(temp);
@@ -41,11 +45,23 @@ public class Character : MonoBehaviour
         {
             if (!isMoving && TheNearestCharacter(this.gameObject) != null)
             {
+                
                 Attack();
 
             }
+            else
+            {
+                isAttack = false;
+            }
         }
-        
+
+        //if (!isAttack && !isMoving)
+        //{
+        //    Debug.Log("2");
+        //    ChangeAnim(AnimationType.IDLE);
+        //}
+
+
     }
     public void ChangeAnim(AnimationType _type)
     {
@@ -81,20 +97,30 @@ public class Character : MonoBehaviour
     protected void Attack()
     {
         attackTime = 3f;
+        
         GameObject temp = TheNearestCharacter(this.gameObject);
         transform.LookAt(temp.transform.position);
         ChangeAnim(AnimationType.ATTACK);
+        isAttack = true;
         
-        weapon.GetComponent<Weapon>().Fire(TheNearestCharacter(this.gameObject).transform.position);
-        Debug.Log("attacking");
+        StartCoroutine(ThrowWeapon());
+        StartCoroutine(EndAttack());
+        //StartCoroutine(EndAttack());
+
+
     }
     protected void Ulti()
     {
 
     }
-    protected void OnDespawn()
+    protected virtual void OnDeath()
     {
-
+        ChangeAnim(AnimationType.DEAD);
+        Invoke(nameof(OnDespawn), 0.5f);
+    }
+    protected virtual void OnDespawn()
+    {
+        
     }
     public void ChangeSkin(int colorID)
     {
@@ -113,9 +139,11 @@ public class Character : MonoBehaviour
             GameObject temp = null;
             foreach(Collider collider in hitColliders)
             {
+                Character character=collider.GetComponent<Character>();
                 float tempDistance = Vector3.Distance(collider.transform.position, theGameObject.transform.position);
-                if (collider.gameObject != theGameObject&&tempDistance<distance)
+                if (collider.gameObject != theGameObject&&tempDistance<distance&&collider/*&&!character.isDead*/)
                 {
+                    
                     temp = collider.gameObject;
                     distance = tempDistance;
                 }
@@ -129,14 +157,38 @@ public class Character : MonoBehaviour
             return null;
         }
     }
-    public void ThrowWeapon()
+    public IEnumerator ThrowWeapon()
     {
+        yield return new WaitForSeconds(0.3f);
+        GameObject weaponObject = GameObject.Instantiate(weapon);
+        weaponObject.transform.position = weaponBase.transform.position;
+        weaponObject.transform.rotation = weaponBase.transform.rotation;
+        GameObject target = TheNearestCharacter(this.gameObject);
+        if(target != null)
+        {
+            weaponObject.GetComponent<Weapon>().Fire(target.transform.position);
+        }
+        weaponBase.gameObject.SetActive(false);
 
     }
-    public void EndAttack()
+    public IEnumerator EndAttack()
     {
-
+        yield return new WaitForSeconds(1f);
+        ChangeAnim(AnimationType.IDLE);
+        
+        weaponBase.gameObject.SetActive(true);
+        
     }
-   
+    private void OnTriggerEnter(Collider other)
+    {
+        Weapon weapon = other.GetComponent<Weapon>();
+        if (weapon != null&&weapon.weaponParent!=gameObject)
+        {
+            
+            this.OnDeath();
+        }
+        
+    }
+
 
 }

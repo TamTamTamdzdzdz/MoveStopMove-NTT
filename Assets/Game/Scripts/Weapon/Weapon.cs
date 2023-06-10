@@ -7,8 +7,9 @@ public class Weapon : MonoBehaviour
 {
     public static Weapon Instance;
     protected float speed;
-    //public Vector3 target;
+    public Vector3 target;
     [SerializeField] Transform weaponPosition;
+    [SerializeField] public GameObject weaponParent;
     
     // Start is called before the first frame update
     void Start()
@@ -21,14 +22,15 @@ public class Weapon : MonoBehaviour
     {
 
     }
-    public void Fire(Vector3 target)
+    public void Fire(Vector3 _target)
     {
-        if (target != null)
+        if (_target != null)
         {
-            Vector3 temp=new Vector3(target.x,this.transform.position.y,target.z);
-            LeanTween.move(gameObject, target, 1f).setOnComplete(() =>
+            target = _target;
+            Vector3 temp=new Vector3(_target.x,this.transform.position.y,_target.z);
+            LeanTween.move(gameObject, temp, 1f).setOnComplete(() =>
             {
-                transform.position = weaponPosition.position;
+                GameObject.Destroy(this.gameObject);
             });
         }
         Debug.Log("get component");

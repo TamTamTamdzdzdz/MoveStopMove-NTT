@@ -15,6 +15,11 @@ public class Player : Character
     // Start is called before the first frame update
     void Start()
     {
+        
+        
+    }
+    public override void OnInit()
+    {
         base.OnInit();
         isMoving = false;
     }
@@ -35,7 +40,7 @@ public class Player : Character
             
 
         }
-        else
+        else if(!isAttack)
         {
             isMoving=false;
             rb.velocity = Vector3.zero;
