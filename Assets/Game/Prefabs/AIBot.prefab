@@ -65,7 +65,7 @@ MonoBehaviour:
   currentAnimType: 0
   animator: {fileID: 1498274327554466623}
   weapon: {fileID: 2396955512025154723}
-  characterMesh: {fileID: 4070305880048120757}
+  skinMesh: {fileID: 4070305880048120757}
   pantsMesh: {fileID: 5160487660295632598}
   myCharacter:
     serializedVersion: 2
@@ -73,9 +73,10 @@ MonoBehaviour:
   isMoving: 0
   weaponTransform: {fileID: 5445634920377755636}
   weaponBase: {fileID: 1664339058559186608}
-  pantMaterials: []
   attackTime: 0
   isAttack: 0
+  pantsData: {fileID: 11400000, guid: 58636a72de71bf541bf1ec9f29096af5, type: 2}
+  skinData: {fileID: 11400000, guid: 562f1469d5a1b7f468e47a528ca0d6f8, type: 2}
   agent: {fileID: 7988876810859597683}
 --- !u!195 &7988876810859597683
 NavMeshAgent:
@@ -141,6 +142,10 @@ PrefabInstance:
     - target: {fileID: 497500024304046557, guid: 0f1b6bdd5c71251468379fa8d1d197d0, type: 3}
       propertyPath: m_Layer
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 497500024304046557, guid: 0f1b6bdd5c71251468379fa8d1d197d0, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 543073612071848081, guid: 0f1b6bdd5c71251468379fa8d1d197d0, type: 3}
       propertyPath: m_Name

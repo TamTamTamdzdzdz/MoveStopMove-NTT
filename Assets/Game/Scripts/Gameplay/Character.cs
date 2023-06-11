@@ -12,18 +12,20 @@ public class Character : MonoBehaviour
     [SerializeField] protected AnimationType currentAnimType = AnimationType.IDLE;
     [SerializeField] protected Animator animator;
     [SerializeField] protected GameObject weapon;
-    [SerializeField] protected SkinnedMeshRenderer characterMesh;
+    [SerializeField] protected SkinnedMeshRenderer skinMesh;
     [SerializeField] protected SkinnedMeshRenderer pantsMesh;
     [SerializeField] protected LayerMask myCharacter;
     public bool isMoving=false;
     [SerializeField] protected Transform weaponTransform;
     [SerializeField] protected Transform weaponBase;
-    public List<Material> pantMaterials;
+    //public List<Material> pantMaterials;
     protected float speed =10f;
     protected float radius = 14f;
     //public bool isDead=false;
     public float attackTime;
     public bool isAttack=false;
+    [SerializeField] protected PantsData pantsData;
+    [SerializeField] protected SkinData skinData;
     // Start is called before the first frame update
     void Start()
     {
@@ -33,8 +35,8 @@ public class Character : MonoBehaviour
     {
         //isDead=false;
         ChangeAnim(AnimationType.IDLE);
-        int temp=Random.Range(0,pantMaterials.Count);
-        ChangeSkin(temp);
+        pantsMesh.material= pantsData.GetPantsMat(Random.Range(0, pantsData.listMaterial.Count));
+        skinMesh.material =skinData.GetSkinMat(Random.Range(0, skinData.listMaterial.Count));
        
     }
     // Update is called once per frame
@@ -122,14 +124,14 @@ public class Character : MonoBehaviour
     {
         
     }
-    public void ChangeSkin(int colorID)
-    {
-        if (colorID < pantMaterials.Count)
-        {
-            characterMesh.material = pantMaterials[colorID];
-            pantsMesh.material = pantMaterials[colorID];
-        }
-    }
+    //public void ChangeSkin(int colorID,List<Material>)
+    //{
+    //    if (colorID < pantMaterials.Count)
+    //    {
+    //        //skinMesh.material = pantMaterials[colorID];
+    //        pantsMesh.material = pantMaterials[colorID];
+    //    }
+    //}
     protected GameObject TheNearestCharacter(GameObject theGameObject)
     {
         Collider[] hitColliders = Physics.OverlapSphere(theGameObject.transform.position, radius / 2, myCharacter);

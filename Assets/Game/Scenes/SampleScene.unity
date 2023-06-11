@@ -390,6 +390,18 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6668181323970953847, guid: 0f1b6bdd5c71251468379fa8d1d197d0, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6668181323970953847, guid: 0f1b6bdd5c71251468379fa8d1d197d0, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6668181323970953847, guid: 0f1b6bdd5c71251468379fa8d1d197d0, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.126
+      objectReference: {fileID: 0}
     - target: {fileID: 6904220707240349043, guid: 0f1b6bdd5c71251468379fa8d1d197d0, type: 3}
       propertyPath: m_Layer
       value: 0
@@ -615,7 +627,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!54 &322563344
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -647,7 +659,7 @@ MonoBehaviour:
   currentAnimType: 0
   animator: {fileID: 1862384179}
   weapon: {fileID: 1440249779}
-  characterMesh: {fileID: 1586487203}
+  skinMesh: {fileID: 0}
   pantsMesh: {fileID: 1560565755}
   myCharacter:
     serializedVersion: 2
@@ -655,17 +667,10 @@ MonoBehaviour:
   isMoving: 0
   weaponTransform: {fileID: 1026891242}
   weaponBase: {fileID: 1440249784}
-  pantMaterials:
-  - {fileID: 2100000, guid: ad843223f4a532c4f86763fd8b48466d, type: 2}
-  - {fileID: 2100000, guid: 85dd14f9a53bcec4d8013a8a599f7841, type: 2}
-  - {fileID: 2100000, guid: b542459739101aa4b9cc2e0fb2ee0ee3, type: 2}
-  - {fileID: 2100000, guid: 3643b6220e7796f4cb259423bbf73832, type: 2}
-  - {fileID: 2100000, guid: a73577037180d5040839f1760bdb81f3, type: 2}
-  - {fileID: 2100000, guid: 8f01652a1396b3d4d904ccbc93a53fb8, type: 2}
-  - {fileID: 2100000, guid: b81810d3b1cdbe54f911c8f5cf89f2dd, type: 2}
-  - {fileID: 2100000, guid: 6187471be648e5248b41895397291c3b, type: 2}
   attackTime: 0
   isAttack: 0
+  pantsData: {fileID: 11400000, guid: 58636a72de71bf541bf1ec9f29096af5, type: 2}
+  skinData: {fileID: 11400000, guid: 562f1469d5a1b7f468e47a528ca0d6f8, type: 2}
   variableJoystick: {fileID: 1118326862}
   cylinder: {fileID: 584276457}
   rb: {fileID: 322563344}
@@ -677,7 +682,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 322563343}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -45.5, y: 0, z: 0}
+  m_LocalPosition: {x: 9.2, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1232,11 +1237,6 @@ Transform:
 --- !u!137 &1560565755 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 869041021565108753, guid: 0f1b6bdd5c71251468379fa8d1d197d0, type: 3}
-  m_PrefabInstance: {fileID: 79138293}
-  m_PrefabAsset: {fileID: 0}
---- !u!137 &1586487203 stripped
-SkinnedMeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 8353730606427211634, guid: 0f1b6bdd5c71251468379fa8d1d197d0, type: 3}
   m_PrefabInstance: {fileID: 79138293}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1858649758

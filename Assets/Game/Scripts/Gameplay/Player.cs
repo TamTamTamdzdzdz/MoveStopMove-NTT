@@ -15,7 +15,7 @@ public class Player : Character
     // Start is called before the first frame update
     void Start()
     {
-        
+        OnInit();
         
     }
     public override void OnInit()
