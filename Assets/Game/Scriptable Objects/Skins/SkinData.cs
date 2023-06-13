@@ -5,8 +5,8 @@ using UnityEngine;
 public class SkinData : ScriptableObject
 {
     public List<Material> listMaterial;
-    public Material GetSkinMat(int ColorId)
+    public Material GetSkinMat(int colorId)
     {
-        return listMaterial[ColorId];
+        return listMaterial[(int)colorId];
     }
 }

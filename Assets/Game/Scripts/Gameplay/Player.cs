@@ -40,11 +40,17 @@ public class Player : Character
             
 
         }
-        else if(!isAttack)
+        else if (!isAttack)
         {
-            isMoving=false;
+            isMoving = false;
             rb.velocity = Vector3.zero;
             ChangeAnim(AnimationType.IDLE);
+        }
+        else
+        {
+            
+            isMoving = false;
+            rb.velocity = Vector3.zero;
         }
         cylinder.transform.localScale=new Vector3(radius,cylinder.transform.localScale.y,radius);
         if (!isMoving)

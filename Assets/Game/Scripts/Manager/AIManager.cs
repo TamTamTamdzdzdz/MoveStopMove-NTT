@@ -37,6 +37,7 @@ public class AIManager : MonoBehaviour
     {
         if (maxNumber > 0)
         {
+            Debug.Log(aIBot.name);
             maxNumber--;
             aIPooling.ReturnAI(aIBot);
             StartCoroutine(RespawnAI(aIBot));

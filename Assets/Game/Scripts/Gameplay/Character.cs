@@ -36,8 +36,8 @@ public class Character : MonoBehaviour
         //isDead=false;
         ChangeAnim(AnimationType.IDLE);
         pantsMesh.material= pantsData.GetPantsMat(Random.Range(0, pantsData.listMaterial.Count));
-        skinMesh.material =skinData.GetSkinMat(Random.Range(0, skinData.listMaterial.Count));
-       
+        skinMesh.material = skinData.GetSkinMat(Random.Range(0, skinData.listMaterial.Count));
+
     }
     // Update is called once per frame
     public virtual void Update()
@@ -54,6 +54,13 @@ public class Character : MonoBehaviour
             else
             {
                 isAttack = false;
+            }
+        }
+        else
+        {
+            if (isMoving)
+            {
+                attackTime = 0;
             }
         }
 
@@ -143,7 +150,7 @@ public class Character : MonoBehaviour
             {
                 Character character=collider.GetComponent<Character>();
                 float tempDistance = Vector3.Distance(collider.transform.position, theGameObject.transform.position);
-                if (collider.gameObject != theGameObject&&tempDistance<distance&&collider/*&&!character.isDead*/)
+                if (collider.gameObject != theGameObject&&tempDistance<distance/*&&!character.isDead*/)
                 {
                     
                     temp = collider.gameObject;
@@ -162,15 +169,18 @@ public class Character : MonoBehaviour
     public IEnumerator ThrowWeapon()
     {
         yield return new WaitForSeconds(0.3f);
-        GameObject weaponObject = GameObject.Instantiate(weapon);
-        weaponObject.transform.position = weaponBase.transform.position;
-        weaponObject.transform.rotation = weaponBase.transform.rotation;
         GameObject target = TheNearestCharacter(this.gameObject);
-        if(target != null)
+        if (target != null)
         {
+            
+            GameObject weaponObject = GameObject.Instantiate(weapon);
+            weaponObject.transform.position = weaponBase.transform.position;
+            weaponObject.transform.rotation = weaponBase.transform.rotation;
+            
             weaponObject.GetComponent<Weapon>().Fire(target.transform.position);
+            weaponBase.gameObject.SetActive(false);
         }
-        weaponBase.gameObject.SetActive(false);
+       
 
     }
     public IEnumerator EndAttack()
@@ -186,7 +196,7 @@ public class Character : MonoBehaviour
         Weapon weapon = other.GetComponent<Weapon>();
         if (weapon != null&&weapon.weaponParent!=gameObject)
         {
-            
+            Debug.Log(this.gameObject.name+ " other is "+other.gameObject.name);
             this.OnDeath();
         }
         

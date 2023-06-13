@@ -10,6 +10,8 @@ public class AIBot : Character
     public bool IsAttacking => isAttack;
     private AIPooling aIPooling;
     private AIManager aIManager;
+    
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -17,6 +19,9 @@ public class AIBot : Character
     }
     public override void OnInit()
     {
+        
+        this.gameObject.SetActive(true);
+        agent.speed = speed;
         base.OnInit();
         aIPooling = FindObjectOfType<AIPooling>();
         aIManager = FindObjectOfType<AIManager>();
