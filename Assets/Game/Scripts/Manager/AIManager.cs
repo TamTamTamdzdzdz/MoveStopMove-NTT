@@ -16,15 +16,8 @@ public class AIManager : MonoBehaviour
         for(int i = 0; i< currentNumber; i++)
         {
             GameObject aiBot= aIPooling.GetObject(aIPrefab);    
-            if(aiBot!=null)
-            {
-                
-                    
-            }
-            else
-            {
-                Debug.Log("aibot is null");
-            }
+           
+            
         }
     }
 

@@ -15,6 +15,10 @@ public class Character : MonoBehaviour
     [SerializeField] protected SkinnedMeshRenderer skinMesh;
     [SerializeField] protected SkinnedMeshRenderer pantsMesh;
     [SerializeField] protected LayerMask myCharacter;
+    [SerializeField] Transform attachIndicatorPoint;
+    [SerializeField] private int level = 0;
+    public int Level => level;
+    public Transform AttachIndicatorPoint => attachIndicatorPoint;
     public bool isMoving=false;
     [SerializeField] protected Transform weaponTransform;
     [SerializeField] protected Transform weaponBase;
@@ -108,7 +112,7 @@ public class Character : MonoBehaviour
         attackTime = 3f;
         
         GameObject temp = TheNearestCharacter(this.gameObject);
-        transform.LookAt(temp.transform.position);
+        transform.LookAt(new Vector3(temp.transform.position.x,this.transform.position.y,temp.transform.position.z));
         ChangeAnim(AnimationType.ATTACK);
         isAttack = true;
         
@@ -174,9 +178,9 @@ public class Character : MonoBehaviour
         {
             
             GameObject weaponObject = GameObject.Instantiate(weapon);
-            weaponObject.transform.position = weaponBase.transform.position;
-            weaponObject.transform.rotation = weaponBase.transform.rotation;
-            
+            //weaponObject.transform.position = weaponBase.transform.position;
+            //weaponObject.transform.rotation = weaponBase.transform.rotation;
+            weaponObject.transform.SetPositionAndRotation(weaponBase.transform.position, weaponBase.transform.rotation);
             weaponObject.GetComponent<Weapon>().Fire(target.transform.position);
             weaponBase.gameObject.SetActive(false);
         }

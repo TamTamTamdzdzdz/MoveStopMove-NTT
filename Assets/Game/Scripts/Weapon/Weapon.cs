@@ -6,15 +6,15 @@ using UnityEngine;
 public class Weapon : MonoBehaviour
 {
     public static Weapon Instance;
-    protected float speed;
+    protected float speed=10f;
     public Vector3 target;
     [SerializeField] Transform weaponPosition;
     [SerializeField] public GameObject weaponParent;
     
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
-       
+        speed = 1f;
     }
 
     // Update is called once per frame
@@ -28,7 +28,8 @@ public class Weapon : MonoBehaviour
         {
             target = _target;
             Vector3 temp=new Vector3(_target.x,this.transform.position.y,_target.z);
-            LeanTween.move(gameObject, temp, 1f).setOnComplete(() =>
+            float distance=Vector3.Distance(this.transform.position,temp);
+            LeanTween.move(gameObject, temp, distance/speed).setOnComplete(() =>
             {
                 GameObject.Destroy(this.gameObject);
             });

@@ -12,6 +12,7 @@ public class AIBot : Character
     private AIManager aIManager;
     
     
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -19,7 +20,15 @@ public class AIBot : Character
     }
     public override void OnInit()
     {
-        
+        //if (Time.timeScale < 0.01f)
+        //{
+        //    return;
+        //}
+        //IndicatorManager.Instance.CreateNewIndicator(this);
+        //if (indicatorController != null)
+        //{
+        //    indicatorController.gameObject.SetActive(true);
+        //}
         this.gameObject.SetActive(true);
         agent.speed = speed;
         base.OnInit();
@@ -27,11 +36,19 @@ public class AIBot : Character
         aIManager = FindObjectOfType<AIManager>();
         transform.position= new Vector3(Random.Range(-15f, 15f), 0, Random.Range(-15f, 15f));
         ChangeState(new IdleState());
+        if (this != null)
+        {
+            IndicatorManager.Instance.CreateNewIndicator(this);
+        }
         
     }
     // Update is called once per frame
     public override void Update()
     {
+        if (Time.timeScale < 0.01f)
+        {
+            return;
+        }
         base.Update();
         if (currentState != null)
         {
@@ -55,7 +72,18 @@ public class AIBot : Character
     }
     protected override void OnDespawn()
     {
+        //IndicatorManager.Instance.RemoveIndicator(this);
+        //IndicatorController indicatorController = GetComponent<IndicatorController>();
+        //if (indicatorController != null)
+        //{
+        //    indicatorController.gameObject.SetActive(false);
+        //}
+        //else
+        //{
+        //    Debug.Log("indicator is null");
+        //}
         base.OnDespawn();
         aIManager.DespawnAI(this.gameObject);
+        IndicatorManager.Instance.RemoveIndicator(this);
     }
 }
