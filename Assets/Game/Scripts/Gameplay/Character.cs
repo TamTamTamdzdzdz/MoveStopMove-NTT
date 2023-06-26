@@ -16,7 +16,7 @@ public class Character : MonoBehaviour
     [SerializeField] protected SkinnedMeshRenderer pantsMesh;
     [SerializeField] protected LayerMask myCharacter;
     [SerializeField] Transform attachIndicatorPoint;
-    [SerializeField] private int level = 0;
+    [SerializeField] protected int level = 0;
     public int Level => level;
     public Transform AttachIndicatorPoint => attachIndicatorPoint;
     public bool isMoving=false;
@@ -49,7 +49,7 @@ public class Character : MonoBehaviour
         attackTime-=Time.deltaTime;
         if (attackTime < 0)
         {
-            if (!isMoving && TheNearestCharacter(this.gameObject) != null)
+            if (!isMoving && TheNearestCharacter(this.gameObject) != null&&GameManager.instance.gameIsPlaying)
             {
                 
                 Attack();

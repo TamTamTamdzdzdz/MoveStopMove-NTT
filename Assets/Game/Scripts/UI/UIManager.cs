@@ -1,98 +1,78 @@
-//using System.Collections;
-//using System.Collections.Generic;
-//using UnityEngine;
-//using UnityEngine.UI;
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
-//public static class UIManager /*: MonoBehaviour*/
-//{
-//    public static bool isInitialized { get; private set; }
-//    public static GameObject inGame, mainMenu, pause, winMenu, loseMenu;
-//    public static void Init()
-//    {
-//        isInitialized = true;
-//        Time.timeScale = 0f;
-//        GameObject canvas = GameObject.Find("Canvas");
-//        inGame = canvas.transform.Find("Ingame").gameObject;
-//        mainMenu = canvas.transform.Find("MainMenu").gameObject;
-//        pause = canvas.transform.Find("Pause").gameObject;
-//        winMenu = canvas.transform.Find("Winning").gameObject;
-//        loseMenu = canvas.transform.Find("Losing").gameObject;
-//    }
-//    public static void OpenMenu(UIEnum uIEnum, GameObject gameObject)
-//    {
-//        if (!isInitialized)
-//        {
-//            Init();
-//        }
-//        switch (uIEnum)
-//        {
-//            case (UIEnum.IN_GAME):
-//                inGame.SetActive(true);
-//                break;
-//            case (UIEnum.MAIN_MENU):
-//                mainMenu.SetActive(true);
-//                break;
-//            case (UIEnum.PAUSE):
-//                pause.SetActive(true);
-//                break;
-//            case (UIEnum.WIN):
-//                winMenu.SetActive(true);
-//                break;
-//            case (UIEnum.LOSE):
-//                loseMenu.SetActive(true);
-//                break;
+public class UIManager : MonoBehaviour
+{
+    public static UIManager instance { get; private set; }
+    [SerializeField] public GameObject inGame;
+    [SerializeField] public GameObject mainMenu;
+    [SerializeField] public GameObject pause;
+    [SerializeField] public GameObject winning;
+    [SerializeField] public GameObject losing;
+    
 
-//        }
-//    }
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
+    private void Start()
+    {
+        SwitchTo(mainMenu);
+    }
+    public void DeActiveAll()
+    {
+        inGame.SetActive(false);
+        mainMenu.SetActive(false);
+        pause.SetActive(false);
+        winning.SetActive(false);
+        losing.SetActive(false);
+    }
+    public void SwitchTo(GameObject UI)
+    {
+        DeActiveAll();
+        UI.gameObject.SetActive(true);
+    }
+    public void NewGame()
+    {
+        SwitchTo(inGame);
+        if(GameManager.instance == null)
+        {
+            Debug.Log("error");
+            return;
+        }
 
+        GameManager.instance.StartGame();
+    }
+    public void SwitchToInGame()
+    {
+        SwitchTo(inGame);
+    }
+    public void SwitchToMainMenu()
+    {
+        SwitchTo(mainMenu);
+    }
+    public void SwitchToPause()
+    {
+        SwitchTo(pause);
+        GameManager.instance.PauseGame();
+    }
+    public void SwitchToLosing()
+    {
+        SwitchTo(losing);
+    }
+    public void SwitchToWinning()
+    {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    //public Canvas canvas;
-//    //public static UIManager instance { get; private set; }
-//    ////public List<IndicatorController> targetIndicators = new List<IndicatorController>();
-
-//    //[SerializeField] GameObject mainMenu;
-//    //[SerializeField] GameObject pausePanel;
-//    //[SerializeField] GameObject endGame;
-//    //[SerializeField] GameObject shop;
-
-//    //private void Awake()
-//    //{
-//    //    if(instance == null)
-//    //    {
-//    //        instance = this;
-//    //    }
-//    //    else
-//    //    {
-//    //        Destroy(this.gameObject);
-//    //    }
-//    //}
-//    //// Start is called before the first frame update
-//    //void Start()
-//    //{
-
-//    //}
-
-//    //// Update is called once per frame
-//    //void Update()
-//    //{
-
-//    //}
-
-
-
-//}
+        SwitchTo(winning);
+    }
+}

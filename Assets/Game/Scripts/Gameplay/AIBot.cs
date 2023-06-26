@@ -54,6 +54,10 @@ public class AIBot : Character
         {
             currentState.OnExecute(this);
         }
+        if (!GameManager.instance.gameIsPlaying)
+        {
+            ChangeState(new IdleState());
+        }
     }
     public void ChangeState(IState newState)
     {

@@ -4,19 +4,40 @@ using UnityEngine;
 
 public class AIManager : MonoBehaviour
 {
-   [SerializeField] private int maxNumber = 100;
-   [SerializeField] private int currentNumber = 5;
+    public static AIManager Instance { get; private set; }
+   [SerializeField] public int maxNumber = 25;
+   [SerializeField] private int currentMax = 10;
     private AIPooling aIPooling;
     [SerializeField] GameObject aIPrefab;
+    public List<GameObject> listAI = new List<GameObject>();
+    private int alive;
     // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        aIPooling=FindObjectOfType<AIPooling>();
-        
-        for(int i = 0; i< currentNumber; i++)
+        if(Instance==null)
         {
-            GameObject aiBot= aIPooling.GetObject(aIPrefab);    
-           
+            Instance = this;
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
+    }
+    private void Start()
+    {
+        alive = maxNumber;
+    }
+    public void SpawnAIBot()
+    {
+        maxNumber = alive;
+        aIPooling = FindObjectOfType<AIPooling>();
+        
+        for (int i = 0; i < currentMax; i++)
+        {
+            GameObject aiBot = aIPooling.GetObject(aIPrefab);
+
+            listAI.Add(aiBot);
+
             
         }
     }
@@ -30,14 +51,18 @@ public class AIManager : MonoBehaviour
     {
         if (maxNumber > 0)
         {
-            Debug.Log(aIBot.name);
-            maxNumber--;
+
+            listAI.Remove(aIBot);
             aIPooling.ReturnAI(aIBot);
-            StartCoroutine(RespawnAI(aIBot));
+            if (listAI.Count > 0)
+            {
+
+                StartCoroutine(RespawnAI(aIBot));
+            }
         }
         else
         {
-            Debug.Log("end game");
+            GameManager.instance.WinningGame();
         }
     }
     public IEnumerator RespawnAI(GameObject aIBot)
@@ -45,5 +70,16 @@ public class AIManager : MonoBehaviour
         yield return new WaitForSeconds(2f);
         GameObject newAI = aIPooling.GetObject(aIPrefab);
         newAI.GetComponent<AIBot>().OnInit();
+        listAI.Add(newAI);
+        maxNumber--;
+    }
+    public void ClearAIBot()
+    {
+        foreach(var ai in listAI)
+        {
+            aIPooling.ReturnAI(ai);
+
+        }
+        listAI.Clear();
     }
 }

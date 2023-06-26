@@ -1,26 +1,23 @@
-//using System.Collections;
-//using System.Collections.Generic;
-//using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
 
-//public class InGame : MonoBehaviour
-//{
-//    public void OnClick_Pause()
-//    {
-//        Time.timeScale = 0;
-//        UIManager.OpenMenu(UIEnum.PAUSE, gameObject);
-//    }
+public class InGame : MonoBehaviour
+{
+    [SerializeField] private TMP_Text aliveAmount;
 
 
 
-//    //// Start is called before the first frame update
-//    //void Start()
-//    //{
-
-//    //}
-
-//    //// Update is called once per frame
-//    //void Update()
-//    //{
-
-//    //}
-//}
+    private void Update()
+    {
+        if(AIManager.Instance != null)
+        {
+            aliveAmount.text = "Alive: " + AIManager.Instance.maxNumber;
+        }
+        else
+        {
+            Debug.LogWarning("aimanager is null");
+        }
+    }
+}
