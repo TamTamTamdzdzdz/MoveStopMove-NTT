@@ -6,6 +6,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance { get; private set; }
+    public Player player;
 
     public enum GAME_STATE
     {
@@ -17,7 +18,7 @@ public class GameManager : MonoBehaviour
 
     public GAME_STATE gameState = GAME_STATE.PREPARE;
     public bool gameIsPlaying => gameState == GAME_STATE.PLAYING;
-    public Player player;
+   
 
 
 
@@ -58,6 +59,8 @@ public class GameManager : MonoBehaviour
         ChangeGameState(GAME_STATE.PREPARE);
         UIManager.instance.SwitchToMainMenu();
         AIManager.Instance.ClearAIBot();
+        player.OnInit();
+        player.Revive();
 
     }
     public void ResumeGame()

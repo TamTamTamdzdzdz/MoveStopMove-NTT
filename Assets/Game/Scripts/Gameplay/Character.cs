@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEngine.GraphicsBuffer;
 
 public class Character : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class Character : MonoBehaviour
     [SerializeField] Transform attachIndicatorPoint;
     [SerializeField] protected int level = 0;
     public int Level => level;
+    
     public Transform AttachIndicatorPoint => attachIndicatorPoint;
     public bool isMoving=false;
     [SerializeField] protected Transform weaponTransform;
@@ -28,6 +30,7 @@ public class Character : MonoBehaviour
     //public bool isDead=false;
     public float attackTime;
     public bool isAttack=false;
+    
     [SerializeField] protected PantsData pantsData;
     [SerializeField] protected SkinData skinData;
     // Start is called before the first frame update
@@ -38,7 +41,7 @@ public class Character : MonoBehaviour
     public virtual void OnInit()
     {
         //isDead=false;
-        ChangeAnim(AnimationType.IDLE);
+        
         pantsMesh.material= pantsData.GetPantsMat(Random.Range(0, pantsData.listMaterial.Count));
         skinMesh.material = skinData.GetSkinMat(Random.Range(0, skinData.listMaterial.Count));
 
@@ -46,27 +49,27 @@ public class Character : MonoBehaviour
     // Update is called once per frame
     public virtual void Update()
     {
-        attackTime-=Time.deltaTime;
-        if (attackTime < 0)
-        {
-            if (!isMoving && TheNearestCharacter(this.gameObject) != null&&GameManager.instance.gameIsPlaying)
-            {
+        //attackTime-=Time.deltaTime;
+        //if (attackTime < 0)
+        //{
+        //    if (!isMoving && TheNearestCharacter(this.gameObject) != null&&GameManager.instance.gameIsPlaying)
+        //    {
                 
-                Attack();
+        //        Attack();
 
-            }
-            else
-            {
-                isAttack = false;
-            }
-        }
-        else
-        {
-            if (isMoving)
-            {
-                attackTime = 0;
-            }
-        }
+        //    }
+        //    else
+        //    {
+        //        isAttack = false;
+        //    }
+        //}
+        //else
+        //{
+        //    if (isMoving)
+        //    {
+        //        attackTime = 0;
+        //    }
+        //}
 
         //if (!isAttack && !isMoving)
         //{
@@ -85,6 +88,7 @@ public class Character : MonoBehaviour
             {
                 case AnimationType.IDLE:
                     animator.SetTrigger("idle");
+                    Debug.Log("animation is idle");
                     break;
                 case AnimationType.RUN:
                     animator.SetTrigger("run");
@@ -107,9 +111,9 @@ public class Character : MonoBehaviour
             }
         }
     }
-    protected void Attack()
+    public void Attack()
     {
-        attackTime = 3f;
+        
         
         GameObject temp = TheNearestCharacter(this.gameObject);
         transform.LookAt(new Vector3(temp.transform.position.x,this.transform.position.y,temp.transform.position.z));
@@ -128,6 +132,7 @@ public class Character : MonoBehaviour
     }
     protected virtual void OnDeath()
     {
+        
         ChangeAnim(AnimationType.DEAD);
         Invoke(nameof(OnDespawn), 0.5f);
     }
@@ -143,7 +148,7 @@ public class Character : MonoBehaviour
     //        pantsMesh.material = pantMaterials[colorID];
     //    }
     //}
-    protected GameObject TheNearestCharacter(GameObject theGameObject)
+    public GameObject TheNearestCharacter(GameObject theGameObject)
     {
         Collider[] hitColliders = Physics.OverlapSphere(theGameObject.transform.position, radius / 2, myCharacter);
         if (hitColliders.Length > 1 && !isMoving)
@@ -180,9 +185,14 @@ public class Character : MonoBehaviour
             GameObject weaponObject = GameObject.Instantiate(weapon);
             //weaponObject.transform.position = weaponBase.transform.position;
             //weaponObject.transform.rotation = weaponBase.transform.rotation;
-            weaponObject.transform.SetPositionAndRotation(weaponBase.transform.position, weaponBase.transform.rotation);
+            weaponObject.transform.position=weaponBase.transform.position;
+           
+            weaponObject.transform.LookAt(target.transform.position);
+            
             weaponObject.GetComponent<Weapon>().Fire(target.transform.position);
+            
             weaponBase.gameObject.SetActive(false);
+            
         }
        
 

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
@@ -12,6 +13,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] public GameObject pause;
     [SerializeField] public GameObject winning;
     [SerializeField] public GameObject losing;
+    [SerializeField] public VariableJoystick joystick;
     
 
     private void Awake()
@@ -69,10 +71,16 @@ public class UIManager : MonoBehaviour
     public void SwitchToLosing()
     {
         SwitchTo(losing);
+        joystick.SetCenter();
+        PointerEventData data = new PointerEventData(EventSystem.current);
+        joystick.OnPointerUp(data);
+        
     }
     public void SwitchToWinning()
     {
-
+        joystick.SetCenter();
         SwitchTo(winning);
+        PointerEventData data = new PointerEventData(EventSystem.current);
+        joystick.OnPointerUp(data);
     }
 }

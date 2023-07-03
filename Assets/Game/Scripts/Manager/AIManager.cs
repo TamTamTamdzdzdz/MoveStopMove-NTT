@@ -11,6 +11,9 @@ public class AIManager : MonoBehaviour
     [SerializeField] GameObject aIPrefab;
     public List<GameObject> listAI = new List<GameObject>();
     private int alive;
+    public Player player;
+    public float posMinX=0, posMinZ=0,posMaxX=0,posMaxZ=0;
+    public List<Vector3> spawnPosition;
     // Start is called before the first frame update
     private void Awake()
     {
@@ -26,6 +29,13 @@ public class AIManager : MonoBehaviour
     private void Start()
     {
         alive = maxNumber;
+        for (int i = -5;i<=5;i++)
+        {
+            for(int j=-5;j<=5;j++)
+            {
+                spawnPosition.Add(new Vector3(5 * i,0,5*j)) ;
+            }
+        }
     }
     public void SpawnAIBot()
     {
@@ -45,7 +55,7 @@ public class AIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+       
     }
     public void DespawnAI(GameObject aIBot)
     {
@@ -81,5 +91,26 @@ public class AIManager : MonoBehaviour
 
         }
         listAI.Clear();
+    }
+    public Vector3 FindTheSpawnPosition(float maxDistance)
+    {
+        while (true)
+        {
+            Vector3 temp = spawnPosition[(int)(Random.Range(0, spawnPosition.Count - 1))];
+            foreach (var ai in listAI)
+            {
+                if (Vector3.Distance(ai.transform.position, new Vector3(temp.x, ai.transform.position.y, temp.z)) < maxDistance)
+                {
+                    break;
+                }
+            }
+            if(Vector3.Distance(player.transform.position, new Vector3(temp.x, player.transform.position.y, temp.z)) < maxDistance)
+            {
+                continue;
+            }
+            return temp;
+        }
+        
+
     }
 }

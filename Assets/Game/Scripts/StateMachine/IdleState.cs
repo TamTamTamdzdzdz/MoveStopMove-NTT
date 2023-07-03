@@ -15,11 +15,15 @@ public class IdleState : IState
     {
         time-=Time.deltaTime;
         aIBot.isMoving = false;
-        if (time < 0f&&!aIBot.isAttack)
+        if (time < 0f)
         {
             aIBot.ChangeState(new PatrolState());
         }
-        
+        if(aIBot.TheNearestCharacter(aIBot.gameObject)!=null)
+        {
+            aIBot.ChangeState(new AttackState());
+            Debug.Log("aiBot change attack state");
+        }
     }
     public void OnExit(AIBot aIBot)
     {

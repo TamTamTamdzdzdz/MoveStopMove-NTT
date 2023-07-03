@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -20,21 +21,13 @@ public class AIBot : Character
     }
     public override void OnInit()
     {
-        //if (Time.timeScale < 0.01f)
-        //{
-        //    return;
-        //}
-        //IndicatorManager.Instance.CreateNewIndicator(this);
-        //if (indicatorController != null)
-        //{
-        //    indicatorController.gameObject.SetActive(true);
-        //}
-        this.gameObject.SetActive(true);
+        
+        
         agent.speed = speed;
         base.OnInit();
         aIPooling = FindObjectOfType<AIPooling>();
         aIManager = FindObjectOfType<AIManager>();
-        transform.position= new Vector3(Random.Range(-15f, 15f), 0, Random.Range(-15f, 15f));
+        transform.position = AIManager.Instance.FindTheSpawnPosition(7f);
         ChangeState(new IdleState());
         if (this != null)
         {
@@ -73,6 +66,22 @@ public class AIBot : Character
     {
         base.OnDeath();
 
+    }
+    public Vector3 RandomPoint( float range)
+    {
+        Vector3 result;
+        for (int i = 0; i < 30; i++)
+        {
+            Vector3 randomPoint = transform.position + Random.insideUnitSphere * range;
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(randomPoint, out hit, range, NavMesh.AllAreas))
+            {
+                result = hit.position;
+                return result;
+            }
+        }
+        //result = Vector3.zero;
+        return RandomPoint(range);
     }
     protected override void OnDespawn()
     {
